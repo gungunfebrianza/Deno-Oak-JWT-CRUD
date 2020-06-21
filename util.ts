@@ -25,25 +25,20 @@ export const authMD = async (
     }
     const jwt = authorization.split(" ")[1];
     let key: string = objCustomConfig.jwtSecret;
-    const validatedJwt = await validateJwt(jwt, key, {
-      isThrowing: false,
-    });
+    const validatedJwt = await validateJwt(jwt, key);
 
-    if (!validatedJwt) {
-      state.user = null;
-    }
-
-    const user = await User.findOneById(validatedJwt?.payload?.iss! as string);
-    if (!user) {
-      state.user = null;
-    }
-
-    state.user = user;
-
-    if (validatedJwt) {
+    if (validatedJwt.isValid) {
+      const user = await User.findOneById(validatedJwt.payload?.iss as string);
+      if (!user) {
+        state.user = null;
+      }
+      state.user = user;
       await next();
       return;
+    } else {
+      state.user = null;
     }
+
     response.status = 401;
     response.body = { message: "Invalid JWT Token" };
   } catch (error) {

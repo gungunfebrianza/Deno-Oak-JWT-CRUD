@@ -22,6 +22,7 @@ export {
 export { validateJwt } from "https://deno.land/x/djwt/validate.ts";
 export {
   ClientPostgreSQL,
-  nessieConfig,
+  NessieConfig,
+  DBDialects,
 } from "https://deno.land/x/nessie/mod.ts";
-export { Schema, dbDialects } from "https://deno.land/x/nessie/qb.ts";
+export { Schema } from "https://deno.land/x/nessie/qb.ts";
